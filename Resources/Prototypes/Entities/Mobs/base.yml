@@ -44,7 +44,7 @@
   - type: MovementSpeedModifier
   - type: RequireProjectileTarget
     active: False
-  - type: TTS
+  - type: TTS # SS220 TTS
 
 - type: entity
   save: false
@@ -108,6 +108,8 @@
     - Shock
     - Cold
     - Caustic
+    - Asphyxiation
+    - Radiation
   - type: DamageOnHighSpeedImpact
     damage:
       types:

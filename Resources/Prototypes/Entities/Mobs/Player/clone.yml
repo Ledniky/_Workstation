@@ -17,6 +17,7 @@
   - TTS # RPSX edit
   # traits
   # - LegsParalyzed (you get healed)
+  - BlackAndWhiteOverlay
   - LightweightDrunk
   - Muted
   - Narcolepsy
