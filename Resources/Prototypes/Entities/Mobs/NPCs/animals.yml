@@ -113,6 +113,7 @@
       10: Dead
   - type: Stamina
     critThreshold: 10
+    animationThreshold: 1
   - type: DamageStateVisuals
     states:
       Alive:
@@ -1057,7 +1058,6 @@
     solution: wool
     requiresSpecialDigestion: true
     # Wooly prevents eating wool deleting the goat so its fine
-    requireDead: false
   - type: FlavorProfile
     flavors:
     - fiber
@@ -1783,7 +1783,6 @@
       Dead:
         Base: splat-0
   - type: Food
-    requireDead: false # Exodus-EatTheMice
   - type: FlavorProfile
     flavors:
     - meaty
@@ -1811,7 +1810,7 @@
       food:
         reagents:
         - ReagentId: UncookedAnimalProteins
-          Quantity: 6 # Exodus-MRP
+          Quantity: 3
   - type: Butcherable
     spawned:
     - id: FoodMeatRat
@@ -2181,6 +2180,7 @@
 - type: entity
   parent: [ SimpleMobBase, FlyingMobBase ]
   id: MobParrotBase
+  name: parrot
   abstract: true
   description: Infiltrates your domain, spies on you, and somehow still a cool pet.
   components:
@@ -2256,7 +2256,6 @@
     bloodMaxVolume: 50
 
 - type: entity
-  name: parrot
   parent: MobParrotBase
   id: MobParrot
   components:
@@ -3148,7 +3147,7 @@
     factions:
     - Syndicate
   - type: Access
-    tags: 
+    tags:
     - NuclearOperative
     - SyndicateAgent
   - type: MeleeWeapon
@@ -3440,7 +3439,6 @@
       Dead:
         Base: splat-0
   - type: Food
-    requireDead: false # Exodus-EatTheMice
   - type: FlavorProfile
     flavors:
     - meaty
@@ -3453,9 +3451,9 @@
       food:
         reagents:
         - ReagentId: Nutriment
-          Quantity: 2.5 # Exodus-MRP
+          Quantity: 10
         - ReagentId: Blood
-          Quantity: 2.5 # Exodus-MRP
+          Quantity: 55
         - ReagentId: Fat
           Quantity: 5
   - type: Butcherable

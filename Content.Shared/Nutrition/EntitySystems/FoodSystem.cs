@@ -27,12 +27,6 @@ using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Utility;
-// RPS-Exodus-EatTheMice-Start
-using Content.Shared.Damage;
-using Content.Shared.Damage.Prototypes;
-using Robust.Shared.Prototypes;
-using Content.Shared.Mobs.Components;
-// RPS-Exodus-EatTheMice-End
 
 namespace Content.Shared.Nutrition.EntitySystems;
 
@@ -59,11 +53,6 @@ public sealed class FoodSystem : EntitySystem
     [Dependency] private readonly StomachSystem _stomach = default!;
     [Dependency] private readonly UtensilSystem _utensil = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
-    // RPS-Exodus-EatTheMice-Start
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    // RPS-Exodus-EatTheMice-End
 
     public const float MaxFeedDistance = 1.0f;
 
@@ -245,7 +234,7 @@ public sealed class FoodSystem : EntitySystem
         var forceFeed = args.User != args.Target;
 
         args.Handled = true;
-        var transferAmount = entity.Comp.TransferAmount != null ? FixedPoint2.Min((FixedPoint2)entity.Comp.TransferAmount, solution.Volume) : solution.Volume;
+        var transferAmount = entity.Comp.TransferAmount != null ? FixedPoint2.Min((FixedPoint2) entity.Comp.TransferAmount, solution.Volume) : solution.Volume;
 
         var split = _solutionContainer.SplitSolution(soln.Value, transferAmount);
 
@@ -279,14 +268,6 @@ public sealed class FoodSystem : EntitySystem
         _reaction.DoEntityReaction(args.Target.Value, solution, ReactionMethod.Ingestion);
         _stomach.TryTransferSolution(stomachToUse!.Value.Owner, split, stomachToUse);
 
-        // RPS-Exodus-EatTheMice-Start
-        if (TryComp<MobThresholdsComponent>(entity, out var mobThresholds) && _mobThreshold.TryGetDeadThreshold(entity, out var deadThreshold, mobThresholds))
-        {
-            var damage = (FixedPoint2)(transferAmount * deadThreshold * 2 / solution.MaxVolume);
-            _damageable.TryChangeDamage(entity, new(_prototypeManager.Index<DamageTypePrototype>("Blunt"), damage));
-        }
-        // RPS-Exodus-EatTheMice-End
-
         var flavors = args.FlavorMessage;
 
         if (forceFeed)
@@ -308,7 +289,7 @@ public sealed class FoodSystem : EntitySystem
             _adminLogger.Add(LogType.Ingestion, LogImpact.Low, $"{ToPrettyString(args.User):target} ate {ToPrettyString(entity.Owner):food}");
         }
 
-        _audio.PlayPredicted(entity.Comp.UseSound, args.Target.Value, args.User, AudioParams.Default.WithVolume(-1f).WithVariation(0.20f));
+        _audio.PlayPredicted(entity.Comp.UseSound, args.Target.Value, args.User, entity.Comp.UseSound.Params.WithVolume(-1f).WithVariation(0.20f));
 
         // Try to break all used utensils
         foreach (var utensil in utensils)
@@ -567,6 +548,6 @@ public sealed class FoodSystem : EntitySystem
         if (comp.TransferAmount == null)
             return 1;
 
-        return Math.Max(1, (int)Math.Ceiling((solution.Volume / (FixedPoint2)comp.TransferAmount).Float()));
+        return Math.Max(1, (int) Math.Ceiling((solution.Volume / (FixedPoint2) comp.TransferAmount).Float()));
     }
 }
